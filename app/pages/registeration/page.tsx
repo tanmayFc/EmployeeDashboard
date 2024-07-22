@@ -36,6 +36,7 @@ import { League_Spartan } from "next/font/google";
 import { useSession, signIn, signOut } from "next-auth/react";
 import GoogleIcon from "@mui/icons-material/Google";
 import XIcon from "@mui/icons-material/X";
+import axios from "axios";
 
 const validation = yup.object({
   name: yup.string().required("Name is required"),
@@ -98,7 +99,12 @@ export default function Login() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const { name, email, pass } = values;
-      
+      await axios.post("http://localhost:3001/UserDbEntry",{
+        name: name,
+        email: email,
+        pass: pass
+      })
+      .then(()=>router.push('/pages/login'))
     },
   });
 

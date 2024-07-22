@@ -43,10 +43,10 @@ export default function PhotoPage(){
     const session = useSession();
     console.log(session);
 
-    axios.post("http://localhost:3001/AdminDbEntry",{
+    axios.post("http://localhost:3001/UserDbEntry",{
       name: session?.data?.user?.name,
       email: session?.data?.user?.email,
-      idToken: session?.data?.idToken
+      // idToken: session?.data?.idToken
     }).then((res)=>console.log(res));
 
 
@@ -336,7 +336,7 @@ export default function PhotoPage(){
                       {/* <Typography variant="body1" color="text.secondary" sx={{marginTop:'20px'}}>
                         {itr.email}
                       </Typography> */}
-                      
+
                       <Box sx={{display:'grid', placeItems:'center', width:'100%', height:'50px'}}>
                     {
                         OddEven=='Odd'?(
