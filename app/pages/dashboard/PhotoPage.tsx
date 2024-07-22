@@ -27,6 +27,7 @@ import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { League_Spartan } from 'next/font/google';
 import CancelIcon from '@mui/icons-material/Cancel';
 // import usePagination from '@mui/material/usePagination/usePagination';
+import { useState } from 'react';
 
 const spartan = League_Spartan({ subsets:['latin']});
 
@@ -68,20 +69,20 @@ export default function PhotoPage(){
   
     
     // Helper States
-    const [cardData, setCardData ] = React.useState<any[]>([]);
-    const [cardData2, setCardData2 ] = React.useState<any[]>([]);
-    const [cardData3, setCardData3] = React.useState<any[]>([]);
+    const [cardData, setCardData ] = useState<any[]>([]);
+    const [cardData2, setCardData2 ] = useState<any[]>([]);
+    const [cardData3, setCardData3] = useState<any[]>([]);
   
-    const [cancel, setCancel] = React.useState(false);
+    const [cancel, setCancel] = useState(false);
   
     
-    const [album, setAlbum] = React.useState('');
+    const [album, setAlbum] = useState('');
     const handleChange = (event: SelectChangeEvent) => {
       if (cardData2.length != 0) setCardData(cardData2);
       setAlbum(event.target.value);
     };
   
-    const [OddEven, setOddEven] = React.useState('None');
+    const [OddEven, setOddEven] = useState('None');
     const handleChange2 = (event: SelectChangeEvent) => {
       setOddEven(event.target.value);
     };
