@@ -68,9 +68,9 @@ export default function PhotoPage(){
   
     
     // Helper States
-    const [cardData, setCardData ] = React.useState([]);
-    const [cardData2, setCardData2 ] = React.useState([]);
-    const [cardData3, setCardData3] = React.useState([]);
+    const [cardData, setCardData ] = React.useState<any[]>([]);
+    const [cardData2, setCardData2 ] = React.useState<any[]>([]);
+    const [cardData3, setCardData3] = React.useState<any[]>([]);
   
     const [cancel, setCancel] = React.useState(false);
   
