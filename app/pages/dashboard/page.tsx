@@ -18,7 +18,7 @@ import { Padding } from '@mui/icons-material';
 const spartan = League_Spartan({ subsets:['latin']});
 
 
-function page() {
+function Page() {
 
   const session = useSession();
   const dispatch = useDispatch(); 
@@ -234,5 +234,5 @@ function page() {
   )
 }
 
-export default page
+export default Page
 
