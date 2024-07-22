@@ -309,8 +309,8 @@ export default function PhotoPage(){
   
             <Grid container item spacing={2}>
   
-                {paginationData.currentData().map((itr)=>
-                  <Grid item>
+                {paginationData.currentData().map((itr:any)=>
+                  <Grid item key={itr.id}>
                   <Card sx={{ width: 210, height: 227, borderRadius: '30px', display:'flex', flexDirection:'column', alignItem:'center',boxShadow: '0px 6px 20px 0px #BCBCBC40', paddingBottom:'0px'}}>
                     <CardMedia
                       sx={{ height: 80, borderRadius:'50%', width: 80, marginX: 'auto', marginTop:'15px',  marginBottom:'10px' }}
@@ -336,6 +336,7 @@ export default function PhotoPage(){
                       {/* <Typography variant="body1" color="text.secondary" sx={{marginTop:'20px'}}>
                         {itr.email}
                       </Typography> */}
+                      
                       <Box sx={{display:'grid', placeItems:'center', width:'100%', height:'50px'}}>
                     {
                         OddEven=='Odd'?(
