@@ -28,6 +28,7 @@ import { League_Spartan } from 'next/font/google';
 import CancelIcon from '@mui/icons-material/Cancel';
 // import usePagination from '@mui/material/usePagination/usePagination';
 import { useState } from 'react';
+import { setEmail, setPass, setLogin, setName, setToken } from "../../features/LoginSlice";
 
 const spartan = League_Spartan({ subsets:['latin']});
 
@@ -41,7 +42,24 @@ interface inter{
 export default function PhotoPage(){
 
     const session = useSession();
-    console.log(session);
+    const dispatch = useDispatch()
+    // console.log(session);
+
+    
+          // axios.post('http://localhost:3001/NextAuthEntry',{
+          //   name: session?.data?.user?.name,
+          //   email: session?.data?.user?.email
+          // })
+          // .then((res)=>{
+          //   dispatch(setName(res.data.response.name));
+          //   dispatch(setEmail(res.data.response.email));
+          //   dispatch(setToken(res.data.token));
+          //   // dispatch(setLogin(true));
+          //   // router.push('/pages/dashboard');
+          //   console.log('Hello');
+          //   console.log(res);
+          //   // console.log(session);
+          // })
   
     // styles
     const headline = {
