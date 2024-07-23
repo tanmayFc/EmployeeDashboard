@@ -21,7 +21,6 @@ import * as React from "react";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import "../../page.module.css";
-import { useEffect } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import img1 from "../../resources/img1.png";
 import img2 from "../../resources/img2.png";
@@ -83,6 +82,7 @@ export default function Login() {
       },
     },
     breakpoints: {},
+    
   });
 
   const [incorrect, setIncorrect] = useState(false);
@@ -119,7 +119,6 @@ export default function Login() {
   const passwordVisibility = {
     color: "black",
     fontSize: "19px",
-    // marginRight: ".3rem",
     cursor: "pointer",
   };
 
@@ -138,32 +137,7 @@ export default function Login() {
   };
 
   const session = useSession();
-  // console.log(session.status);
-
-  // useEffect(() => {
-  //   async function passData() {
-  //     console.log(session.data?.user?.name);
-  //     const name = session.data?.user?.name;
-  //     const email = session.data?.user?.email;
-  //     if (session.status === "authenticated") {
-  //       await axios
-  //                         .post("http://localhost:3001/NextAuthEntry", {
-  //                           name:name,
-  //                           email:email
-  //                         })
-  //                         .then((res)=>{
-  //                           dispatch(setName(res.data.response.name));
-  //                           dispatch(setEmail(res.data.response.email));
-  //                           dispatch(setToken(res.data.token));
-  //                           dispatch(setLogin(true));
-  //                           router.push('/pages/dashboard');
-  //                           // console.log(session.status);
-  //                           // console.log(res);
-  //                         })
-  //     }
-  //   }
-  //   passData();
-  // }, [session.status]);
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -389,8 +363,9 @@ export default function Login() {
                           fontSize: "22px",
                         },
                       }}
+                      
                       onClick={async () => {
-                        await signIn('google')
+                        await signIn('google', {callbackUrl:'/pages/dashboard'})
                         const name= session?.data?.user?.name
                         const email= session?.data?.user?.email
                         await axios
@@ -403,11 +378,14 @@ export default function Login() {
                             dispatch(setEmail(res.data.response.email));
                             dispatch(setToken(res.data.token));
                             dispatch(setLogin(true));
-                            router.push('/pages/dashboard');
-                          })
                             
-                         
-                      }}
+                          })
+                          
+                          
+                      }
+                      
+                    }
+                    
                     />
                     {/* { callbackUrl: '/pages/dashboard' } */}
 
