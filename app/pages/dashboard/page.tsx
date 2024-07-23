@@ -129,6 +129,7 @@ function Page() {
 
   const [photoPage, setPhotoPage] = React.useState('none');
   const [handlePhoto, setHandlePhoto] = React.useState(false);
+  // const [sideOptionColor, setSideOptionColor] = React.useState(['none','none','none','none','none']);
 
 
   // Style objects

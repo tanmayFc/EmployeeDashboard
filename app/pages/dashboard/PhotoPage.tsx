@@ -42,14 +42,6 @@ export default function PhotoPage(){
 
     const session = useSession();
     console.log(session);
-
-    axios.post("http://localhost:3001/UserDbEntry",{
-      name: session?.data?.user?.name,
-      email: session?.data?.user?.email,
-      // idToken: session?.data?.idToken
-    }).then((res)=>console.log(res));
-
-
   
     // styles
     const headline = {

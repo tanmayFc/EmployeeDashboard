@@ -3,29 +3,20 @@ import formik, { useFormik } from 'formik';
 import * as yup from 'yup';
 import TextField from '@mui/material/TextField';
 import { useRouter } from 'next/navigation';
-import { setEmail, setPass, setLogin } from '../../features/LoginSlice';
+import { setEmail, setPass, setLogin, setName, setToken } from "../../features/LoginSlice";
 import { useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import { Box, Container, FormControlLabel } from '@mui/material';
-import { orange } from '@mui/material/colors';
 import { createTheme, ThemeProvider} from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-import InputAdornment from '@mui/material/InputAdornment';
-import FilledInput from '@mui/material/FilledInput';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
-import { Fullscreen } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import '../../page.module.css';
 import { useEffect } from 'react';
-import FormontrolLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Image from 'next/image';
 import img1 from '../../resources/img1.png';
 import img2 from '../../resources/img2.png';
 import img3 from '../../resources/img3.png';
@@ -37,6 +28,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import GoogleIcon from '@mui/icons-material/Google';
 import XIcon from '@mui/icons-material/X';
 import discord from './discord-brands-solid.svg';
+import axios from 'axios';
 
 const validation = yup.object({
     email: yup
@@ -96,6 +88,7 @@ export default function Login(){
 
       
 
+    const [incorrect, setIncorrect] = useState(false);
     const router = useRouter();
     const dispatch = useDispatch();
     const formik = useFormik({
@@ -106,10 +99,26 @@ export default function Login(){
       validationSchema: validation,
       onSubmit: async (values) => {
         const {email, pass} = values;
-        dispatch(setEmail(email));
-        dispatch(setPass(pass));
-        dispatch(setLogin(true));
-        router.push("/pages/dashboard");
+        console.log(values);
+        await axios.post("http://localhost:3001/UserLogin",{
+          email: email,
+          pass: pass
+        })
+        .then((res)=>
+          {
+            if(res.data.msg == 'user not found'){
+              setIncorrect(true);
+            }
+            else{
+              dispatch(setEmail(email));
+              dispatch(setPass(pass));
+              dispatch(setLogin(true));
+              dispatch(setToken(res.data.token));
+              dispatch(setName(res.data.response.name));
+              router.push("/pages/dashboard");
+              console.log(res);
+            }
+          })
       },
     });
 
@@ -134,6 +143,29 @@ export default function Login(){
       paddingTop:'15px'
     };
 
+    const session = useSession();
+
+    useEffect(()=>{
+      async function passData(){
+        console.log(session?.data?.user?.name)
+        if(session.status === "authenticated"){
+          await axios.post('http://localhost:3001/NextAuthEntry',{
+            name: session?.data?.user?.name,
+            email: session?.data?.user?.email
+          })
+          .then((res)=>{
+            dispatch(setName(res.data.response.name));
+            dispatch(setEmail(res.data.response.email));
+            dispatch(setToken(res.data.token));
+            dispatch(setLogin(true));
+            router.push('/pages/login');
+            // console.log(session);
+          })
+        }
+      }
+      passData();
+    },[session.status])
+
     
 
     return(
@@ -151,6 +183,7 @@ export default function Login(){
                           <Typography variant="subtitle1" color='secondary.main' sx={Title}>Welcome to FewerClicks!</Typography>
                         </Grid>
                         <Grid container item alignItems="center" justifyContent='center' sx={{marginTop: '50px'}}>
+                          {incorrect && <Grid item sx={{marginBottom:'15px', color:'red'}}>*Incorrect Email or Password*</Grid>}
                           <Grid item>
                             <TextField
                             id="email"
@@ -267,14 +300,15 @@ export default function Login(){
                                 cursor:'pointer',
                                 fontSize:'22px'
                               }
-                            }} onClick={() => signIn("google", { callbackUrl: '/pages/dashboard' })}/>
+                            }} onClick={() => signIn("google")}/>
+                            {/* { callbackUrl: '/pages/dashboard' } */}
 
                             <XIcon sx={{fontSize:'20px', color:'success.main', marginLeft:'10px',
                               '&:hover':{
                                 cursor:'pointer',
                                 fontSize:'22px'
                               }
-                            }} onClick={() => signIn("twitter", { callbackUrl: '/pages/dashboard' })}/>
+                            }} onClick={() => signIn("twitter")}/>
 
                     <Box sx={{backgroundImage:`url(${discord.src})`, height:'23px', width:'28px', marginLeft:'10px',
                               '&:hover':{
@@ -282,7 +316,7 @@ export default function Login(){
                                 height:'25px', 
                                 width:'30px'
                               }}}
-                              onClick={() => signIn("discord", { callbackUrl: '/pages/dashboard' })}></Box>
+                              onClick={() => signIn("discord")}></Box>
 
                             
                              

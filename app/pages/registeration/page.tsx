@@ -3,7 +3,7 @@ import formik, { useFormik } from "formik";
 import * as yup from "yup";
 import TextField from "@mui/material/TextField";
 import { useRouter } from "next/navigation";
-import { setEmail, setPass, setLogin } from "../../features/LoginSlice";
+import { setEmail, setPass, setLogin, setName, setToken } from "../../features/LoginSlice";
 import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import { Box, Container, FormControlLabel } from "@mui/material";
@@ -88,6 +88,7 @@ export default function Login() {
     breakpoints: {},
   });
 
+  const [incorrect, setIncorrect] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const formik = useFormik({
@@ -99,12 +100,26 @@ export default function Login() {
     validationSchema: validation,
     onSubmit: async (values) => {
       const { name, email, pass } = values;
-      await axios.post("http://localhost:3001/UserDbEntry",{
+      await axios.post("http://localhost:3001/UserRegisteration",{
         name: name,
         email: email,
         pass: pass
       })
-      .then(()=>router.push('/pages/login'))
+      .then((res)=>{
+        if(res.data.msg == 'user exists'){
+          setIncorrect(true);
+        }
+        else{
+        setEmail(email);
+        setName(name);
+        setLogin(true);
+        setPass(pass);
+        setToken(res.data.token);
+        setName(res.data.response.name)
+        console.log(res.data.token);
+        router.push('/pages/dashboard');
+        }
+      });
     },
   });
 
@@ -179,6 +194,8 @@ export default function Login() {
                   justifyContent="center"
                   sx={{ marginTop: "50px" }}
                 >
+
+                  {incorrect && <Grid item sx={{marginBottom:'15px', color:'red'}}>User already registered. Please Login.</Grid>}
 
                 <Grid item>
                     <TextField
