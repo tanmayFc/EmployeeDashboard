@@ -115,7 +115,7 @@ export default function Login(){
               dispatch(setLogin(true));
               dispatch(setToken(res.data.token));
               dispatch(setName(res.data.response.name));
-              router.push("/pages/dashboard");
+              // router.push("/pages/dashboard");
               console.log(res);
             }
           })
@@ -144,21 +144,25 @@ export default function Login(){
     };
 
     const session = useSession();
+    console.log(session.status);
 
     useEffect(()=>{
       async function passData(){
         console.log(session?.data?.user?.name)
-        if(session.status === "authenticated"){
+        if(session.status == "authenticated"){
           await axios.post('http://localhost:3001/NextAuthEntry',{
             name: session?.data?.user?.name,
             email: session?.data?.user?.email
           })
           .then((res)=>{
+            
             dispatch(setName(res.data.response.name));
             dispatch(setEmail(res.data.response.email));
             dispatch(setToken(res.data.token));
             dispatch(setLogin(true));
-            router.push('/pages/login');
+            // router.push('/pages/dashboard');
+            console.log('Hello');
+            console.log(res);
             // console.log(session);
           })
         }
