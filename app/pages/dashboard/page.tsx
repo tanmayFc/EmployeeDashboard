@@ -28,6 +28,7 @@ function Page() {
       dispatch(setLogin(true));
     }
 
+    {/******* Global state data *******/}
     const emailVal = useSelector((state:RootState) => state.Login.email);
     const passVal = useSelector((state:RootState) => state.Login.pass);
     const loginVal = useSelector((state:RootState) => state.Login.isLogin);
@@ -127,12 +128,13 @@ function Page() {
       }
   });
 
+  {/******* Helper States *******/}
   const [photoPage, setPhotoPage] = React.useState('none');
   const [handlePhoto, setHandlePhoto] = React.useState(false);
-  // const [sideOptionColor, setSideOptionColor] = React.useState(['none','none','none','none','none']);
+  
 
 
-  // Style objects
+  {/******* Styles *******/}
   const parentGrid = {
     backgroundColor:'success.main',    
     height:'100%',
@@ -144,10 +146,6 @@ function Page() {
     height:'100vh',
     paddingTop:'107px',
     paddingLeft: '30px',
-    // paddingRight: '20px',
-    // display:'flex',
-    // flexDirection: 'column',
-    // justifyContent: 'start'
   }
 
   const mainSection = {
@@ -165,7 +163,6 @@ function Page() {
     paddingLeft: '20px',
     paddingRight: '20px',
     width:'100%'
-    // marginTop: '20px'
   }
 
   const eachItem = {
@@ -174,6 +171,9 @@ function Page() {
       backgroundColor: 'primary.main',
       color: 'success.main',
       cursor: 'pointer'
+    },
+    '&::before':{
+      backgroundColor:'red'
     },
     height: '60px',
     paddingLeft: '20px'
@@ -195,32 +195,48 @@ function Page() {
       {/* <Container sx={{backgroundColor:'success.main', height:'100vh'}}>
         
       </Container> */}
+
+      {/******* Sidebar *******/}
       <Grid container justifyContent="center" alignItems="center" sx={parentGrid}>
+
+        {/******* Sidebar Items *******/}
         <Grid container item xs={2.5} sx={sidebar} direction='column'>
         <Grid item container alignItems="center" sx={{paddingRight:'20px', width:'95%'}}>
             <Grid item sx={topItem}></Grid>
         </Grid>
+
           <Grid item container sx={eachItem} alignItems="center" >
             <Grid item> <Typography variant="body1"> My info </Typography> </Grid>
             </Grid>
+
+
           <Grid container item sx={eachItem} alignItems="center">
             <Grid item><Typography variant="body1"> Blogs </Typography></Grid>
           </Grid>
+
+
           <Grid item container justifyContent="space-between" sx={eachItem} alignItems="center">
             <Grid item> <Typography variant="body1"> General info. </Typography></Grid>
             <Grid item sx={{paddingRight:'30px'}}> <KeyboardArrowRightIcon/> </Grid>
           </Grid>
+
+
           <Grid item container justifyContent="space-between" sx={eachItem} alignItems="center">
             <Grid item> <Typography variant="body1"> Teams </Typography> </Grid>
             <Grid item sx={{paddingRight:'30px'}}> <KeyboardArrowRightIcon/> </Grid>
           </Grid>
+
+
           <Grid container item sx={eachItem} alignItems="center"> <Grid item  onClick={handleClickPhotos} sx={{"&:active":{
             backgroundColor: 'white',
             color:'success.main'
           }, width:'100%'
           }}>  <Typography variant="body1"> Photos </Typography> </Grid> </Grid>
+
+
         </Grid>
         
+        {/******* Main section *******/}
         <Grid item container xs={9.5} sx={mainSection} alignItems='flex-start' justifyContent='flex-start'>
             {/* <PhotoPage disp={photoPage} /> */}
             <Grid item sx={{display:photoPage}}>

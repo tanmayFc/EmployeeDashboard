@@ -38,6 +38,8 @@ import GoogleIcon from "@mui/icons-material/Google";
 import XIcon from "@mui/icons-material/X";
 import axios from "axios";
 
+
+{/******* Yup validation structure *******/}
 const validation = yup.object({
   name: yup.string().required("Name is required"),
   email: yup.string().required("Email is required"),
@@ -47,8 +49,8 @@ const validation = yup.object({
 const spartan = League_Spartan({ subsets: ["latin"] });
 
 export default function Login() {
-  const [passvisi, setPassvisi] = useState(false);
-
+  
+  {/******* Custome themes *******/}
   const theme = createTheme({
     palette: {
       primary: {
@@ -88,9 +90,18 @@ export default function Login() {
     breakpoints: {},
   });
 
+
+  {/******* Helper States *******/}
   const [incorrect, setIncorrect] = useState(false);
+  const [passvisi, setPassvisi] = useState(false);
+
+
+  {/******* Instances *******/}
   const router = useRouter();
   const dispatch = useDispatch();
+
+
+  {/******* Formic / Register *******/}
   const formik = useFormik({
     initialValues: {
       name:"",
@@ -110,19 +121,20 @@ export default function Login() {
           setIncorrect(true);
         }
         else{
-        setEmail(email);
-        setName(name);
-        setLogin(true);
-        setPass(pass);
-        setToken(res.data.token);
-        setName(res.data.response.name)
-        console.log(res.data.token);
+        dispatch(setEmail(email));
+        dispatch(setName(name));
+        dispatch(setLogin(true));
+        dispatch(setPass(pass));
+        dispatch(setToken(res.data.token));
+        console.log(name);
         router.push('/pages/dashboard');
         }
       });
     },
   });
 
+
+  {/******* Styles *******/}
   const passwordVisibility = {
     color: "black",
     fontSize: "19px",
@@ -146,7 +158,9 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Container maxWidth={Fullscreen}> */}
+
+
+      {/******* Parent *******/}
       <Box
         sx={{
           width: "100vw",
@@ -156,6 +170,9 @@ export default function Login() {
           placeItems: "center",
         }}
       >
+
+
+        {/******* Container *******/}
         <Grid
           container
           sx={{
@@ -169,6 +186,9 @@ export default function Login() {
             display: "flex",
           }}
         >
+
+
+          {/******* Left part *******/}
           <Grid item xs={12} lg={5} sx={{ height: "100%" }}>
             <form onSubmit={formik.handleSubmit}>
               <Grid
@@ -178,6 +198,8 @@ export default function Login() {
                 alignItems="center"
                 sx={{ display: "grid", placeItems: "center" }}
               >
+
+                {/******* Title *******/}
                 <Grid item>
                   <Typography
                     variant="subtitle1"
@@ -187,6 +209,9 @@ export default function Login() {
                     Register to FewerClicks
                   </Typography>
                 </Grid>
+
+
+                {/******* Input Fields *******/}
                 <Grid
                   container
                   item
@@ -197,6 +222,8 @@ export default function Login() {
 
                   {incorrect && <Grid item sx={{marginBottom:'15px', color:'red'}}>User already registered. Please Login.</Grid>}
 
+
+                {/******* Name *******/}
                 <Grid item>
                     <TextField
                       id="name"
@@ -239,6 +266,7 @@ export default function Login() {
                   </Grid>
 
 
+                  {/******* Email *******/}
                   <Grid item>
                     <TextField
                       id="email"
@@ -279,6 +307,8 @@ export default function Login() {
                     />
                   </Grid>
 
+
+                  {/******* Password *******/}
                   <Grid item>
                     <TextField
                       id="pass"
@@ -320,7 +350,6 @@ export default function Login() {
                       onChange={formik.handleChange}
                       error={formik.touched.pass && Boolean(formik.errors.pass)}
                       helperText={formik.touched.pass && formik.errors.pass}
- 
 
                       sx={{
                         width: "400px",
@@ -342,9 +371,7 @@ export default function Login() {
                 </Grid>
 
                 
-
-                
-
+                {/******* Registeration Button *******/}
                 <Grid item>
                   <Button
                     color="success"
@@ -359,10 +386,13 @@ export default function Login() {
                     Register
                   </Button>
                 </Grid>
+
               </Grid>
             </form>
           </Grid>
 
+
+          {/******* Right Part *******/}
           <Grid
             item
             xs={7}
@@ -373,6 +403,8 @@ export default function Login() {
               display: { lg: "block", md: "none", sm: "none", xs: "none" },
             }}
           >
+
+            {/******* Images *******/}
             <Box
               sx={{
                 borderRadius: "50%",

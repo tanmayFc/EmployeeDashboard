@@ -49,7 +49,14 @@ export default function PhotoPage() {
   const session = useSession();
   const dispatch = useDispatch();
 
-  // styles
+  {/******* Global state assignments *******/}
+  const emailVal = useSelector((state:RootState) => state.Login.email);
+  const passVal = useSelector((state:RootState) => state.Login.pass);
+  const loginVal = useSelector((state:RootState) => state.Login.isLogin);
+  const nameVal = useSelector((state: RootState) => state.Login.name)
+
+
+  {/******* Styles *******/}
   const headline = {
     height: "80px",
     borderBottom: "2px solid #C5CECE",
@@ -64,31 +71,33 @@ export default function PhotoPage() {
     borderRadius: "50px",
   };
 
-  // Helper States
+  {/******* Card Data holders *******/}
   const [cardData, setCardData] = useState<any[]>([]);
   const [cardData2, setCardData2] = useState<any[]>([]);
   const [cardData3, setCardData3] = useState<any[]>([]);
 
-  const [cancel, setCancel] = useState(false);
+  
 
-  const [album, setAlbum] = useState("");
-  const handleChange = (event: SelectChangeEvent) => {
-    if (cardData2.length != 0) setCardData(cardData2);
-    setAlbum(event.target.value);
-  };
-
+  {/******* Odd_Even *******/}
   const [OddEven, setOddEven] = useState("None");
   const handleChange2 = (event: SelectChangeEvent) => {
     setOddEven(event.target.value);
   };
-
-  // Helper Functions
+  
   function isPrime(num) {
     for (let i = 2; i <= Math.sqrt(num); i++) {
       if (num % i == 0) return false;
     }
     return true;
   }
+
+
+  {/******* Album *******/}
+  const [album, setAlbum] = useState("");
+  const handleChange = (event: SelectChangeEvent) => {
+    if (cardData2.length != 0) setCardData(cardData2);
+    setAlbum(event.target.value);
+  };
 
   useEffect(() => {
     if (album != "All") {
@@ -98,20 +107,24 @@ export default function PhotoPage() {
     }
   }, [album]);
 
+  
+
+
+  {/******* Search *******/}
   const [text, setText] = React.useState("");
+  const [cancel, setCancel] = useState(false);
   const handleChange3 = (event: ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value);
     if (cancel == false) {
       setCardData3(cardData);
       setCancel(true);
-      // setSearch(false);
     }
   };
 
   const handleCancel = () => {
-    // setSearch(true);
     setCancel(false);
   };
+
 
   useEffect(() => {
     if (cancel == true) {
@@ -129,16 +142,9 @@ export default function PhotoPage() {
     }
   }, [cancel]);
 
-  // Mounting
-  useEffect(() => {
-    async function fetchData() {
-      await axios
-        .get("https://jsonplaceholder.typicode.com/comments")
-        .then((res) => setCardData(res.data));
-    }
-    fetchData();
-  }, []);
+  
 
+  {/******* Pagination *******/}
   function usePagination(data, dataPerPage) {
     const [currentPage, setCurrentPage] = React.useState(1);
     const NumPages = Math.ceil(data.length / dataPerPage);
@@ -173,8 +179,23 @@ export default function PhotoPage() {
     paginationData.jump(p);
   }
 
+
+  {/******* Mounting *******/}
+  useEffect(() => {
+    async function fetchData() {
+      await axios
+        .get("https://jsonplaceholder.typicode.com/comments")
+        .then((res) => setCardData(res.data));
+    }
+    fetchData();
+  }, []);
+
+
+
   return (
     <Grid item container sx={{ position: "relative" }}>
+
+      {/******* Header *******/}
       <Grid
         item
         container
@@ -183,13 +204,16 @@ export default function PhotoPage() {
         alignItems="center"
         sx={headline}
       >
+
+        {/******* Title *******/}
         <Grid item>
-          {" "}
           <Typography variant="body2" color="secondary.main">
-            {" "}
-            Photo Management{" "}
-          </Typography>{" "}
+            Photo Management
+          </Typography>
         </Grid>
+
+
+        {/******* Header Dropdown *******/}
         <Grid item sx={{ display: "flex", gap: "20px", mr: "20px" }}>
           <NotificationsNoneIcon sx={{ color: "black" }} />
           <Typography
@@ -197,12 +221,14 @@ export default function PhotoPage() {
             color="secondary.main"
             sx={{ marginTop: "3px" }}
           >
-            {" "}
-            {session?.data?.user?.name}{" "}
+            {nameVal}
           </Typography>
         </Grid>
+
       </Grid>
 
+
+      {/******* Navbar *******/}
       <Grid
         sx={navbar}
         item
@@ -211,6 +237,8 @@ export default function PhotoPage() {
         alignItems="center"
         justifyContent="space-between"
       >
+
+        {/******* Search bar *******/}
         <Grid item xs={3.5}>
           <TextField
             id="searchBar"
@@ -230,7 +258,6 @@ export default function PhotoPage() {
                           cursor: "pointer",
                         },
                       }}
-                      // onClick = {handleSearch}
                     />
                   )}
                   {cancel && (
@@ -250,6 +277,8 @@ export default function PhotoPage() {
           />
         </Grid>
 
+        
+        {/******* Album Dropdown *******/}
         <Grid item container xs={8.5} justifyContent="flex-end">
           <Grid item>
             <FormControl sx={{ m: 1, width: "150px" }} color="success">
@@ -259,8 +288,7 @@ export default function PhotoPage() {
                 id="albumId"
                 value={album}
                 label="Album"
-                // onChange={handleChange}
-                // defaultValue={10}
+                
               >
                 <MenuItem value={"All"}>All</MenuItem>
                 <MenuItem value={"Album 1"}>Album 1</MenuItem>
@@ -270,9 +298,12 @@ export default function PhotoPage() {
             </FormControl>
           </Grid>
 
+
+
+          {/******* Odd_Even_Prime Dropdown *******/}
           <Grid item>
             <FormControl sx={{ m: 1, width: "150px" }} color="success">
-              <InputLabel id="OddEvenLabel">TBD</InputLabel>
+              <InputLabel id="OddEvenLabel">Parity</InputLabel>
               <Select
                 labelId="OddEvenLabel"
                 id="oddEvenId"
@@ -281,9 +312,6 @@ export default function PhotoPage() {
                 onChange={handleChange2}
                 defaultValue="None"
               >
-                {/* <MenuItem value=""> 
-                      <em>None</em>
-                    </MenuItem> */}
                 <MenuItem value={"None"}>None</MenuItem>
                 <MenuItem value={"Odd"}>Odd</MenuItem>
                 <MenuItem value={"Even"}>Even</MenuItem>
@@ -292,6 +320,8 @@ export default function PhotoPage() {
             </FormControl>
           </Grid>
 
+
+          {/******* Add Employee Button *******/}
           <Grid item>
             <Button
               variant="contained"
@@ -307,15 +337,20 @@ export default function PhotoPage() {
                 width: "150px",
               }}
             >
-              Add Photo
+              Add Employee
             </Button>
           </Grid>
         </Grid>
       </Grid>
 
+
+      {/******* Main Section *******/}
       <Grid container item spacing={2}>
         {paginationData.currentData().map((itr: any) => (
           <Grid item key={itr.id}>
+
+
+            {/******* Card *******/}
             <Card
               sx={{
                 width: 210,
@@ -328,6 +363,8 @@ export default function PhotoPage() {
                 paddingBottom: "0px",
               }}
             >
+
+              {/******* Card image *******/}
               <CardMedia
                 sx={{
                   height: 80,
@@ -349,6 +386,8 @@ export default function PhotoPage() {
                   height: "130px",
                 }}
               >
+
+                {/******* Card name *******/}
                 <Box
                   sx={{
                     height: "18px",
@@ -373,14 +412,8 @@ export default function PhotoPage() {
                   </Typography>
                 </Box>
 
-                {/* <Typography variant="body1" color="text.secondary">
-                            {itr.album}
-                        </Typography> */}
 
-                {/* <Typography variant="body1" color="text.secondary" sx={{marginTop:'20px'}}>
-                        {itr.email}
-                      </Typography> */}
-
+                {/******* Odd_Even selection logic *******/}
                 <Box
                   sx={{
                     display: "grid",
@@ -461,24 +494,14 @@ export default function PhotoPage() {
                     </Typography>
                   )}
                 </Box>
-
-                {/* { OddEven == 'Even' && (itr.id%2) == 0 && (<Typography variant="body1" color="text.secondary" sx={{marginTop:'20px', backgroundColor:'success'}} >
-                        Even
-                      </Typography>)}
-
-                      { OddEven == 'Prime' && isPrime(itr.id) && (<Typography variant="body1" color="text.secondary" sx={{marginTop:'20px', backgroundColor:'success'}} >
-                        Prime
-                      </Typography>)}
-
-                      { OddEven == 'None' &&  (<Typography variant="body1" color="text.secondary" sx={{marginTop:'20px'}} >
-                        {itr.email}
-                      </Typography>) } */}
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
 
+
+      {/******* Pagination parent *******/}
       <Grid
         item
         container
@@ -490,6 +513,9 @@ export default function PhotoPage() {
         }}
         justifyContent="space-between"
       >
+
+
+        {/******* Pagination index *******/}
         <Grid item sx={{ marginTop: "10px" }}>
           <Typography variant="body1" color="secondary.main">
             Showing {(page - 1) * 10} to{" "}
@@ -497,6 +523,9 @@ export default function PhotoPage() {
             {cardData.length} entries
           </Typography>
         </Grid>
+
+
+        {/******* Pagination component *******/}
         <Grid item sx={{ marginLeft: "40px" }}>
           <Pagination
             count={paginationData.NumPages}
@@ -510,4 +539,21 @@ export default function PhotoPage() {
       </Grid>
     </Grid>
   );
+}
+
+
+function EmployeeForm(){
+
+  const EmployeeFormParent = {
+    display: 'grid',
+    placeItem: 'center',
+    height: '100dvh',
+    width: '100dvw'
+  }
+
+  return(<>
+    <Grid container sx={EmployeeFormParent}>
+
+    </Grid>
+  </>)
 }

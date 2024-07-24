@@ -35,16 +35,18 @@ import XIcon from "@mui/icons-material/X";
 import discord from "./discord-brands-solid.svg";
 import axios from "axios";
 
+
+{/******* Yup validation structure *******/}
 const validation = yup.object({
-  email: yup.string().required("Email is required"),
+  email: yup.string().email().required("Email is required"),
   pass: yup.string().required("Pass is required"),
 });
 
 const spartan = League_Spartan({ subsets: ["latin"] });
 
 export default function Login() {
-  const [passvisi, setPassvisi] = useState(false);
 
+  {/******* Custome themes *******/}
   const theme = createTheme({
     palette: {
       primary: {
@@ -85,9 +87,18 @@ export default function Login() {
     
   });
 
+  {/******* Helper States *******/}
   const [incorrect, setIncorrect] = useState(false);
+  const [passvisi, setPassvisi] = useState(false);
+
+
+  {/******* Instances *******/}
   const router = useRouter();
   const dispatch = useDispatch();
+  const session = useSession();
+
+
+  {/******* Formik / Login *******/}
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -116,6 +127,8 @@ export default function Login() {
     },
   });
 
+
+  {/******* Styles *******/}
   const passwordVisibility = {
     color: "black",
     fontSize: "19px",
@@ -136,13 +149,13 @@ export default function Login() {
     paddingTop: "15px",
   };
 
-  const session = useSession();
+  
   
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <Container maxWidth={Fullscreen}> */}
 
+      {/******* Parent *******/}
       <Box
         sx={{
           width: "100vw",
@@ -152,6 +165,9 @@ export default function Login() {
           placeItems: "center",
         }}
       >
+
+
+        {/******* Container *******/}
         <Grid
           container
           sx={{
@@ -165,6 +181,8 @@ export default function Login() {
             display: "flex",
           }}
         >
+
+          {/******* Left part *******/}
           <Grid item xs={12} lg={5} sx={{ height: "100%" }}>
             <form onSubmit={formik.handleSubmit}>
               <Grid
@@ -174,6 +192,8 @@ export default function Login() {
                 alignItems="center"
                 sx={{ display: "grid", placeItems: "center" }}
               >
+
+                {/******* Title *******/}
                 <Grid item>
                   <Typography
                     variant="subtitle1"
@@ -183,6 +203,9 @@ export default function Login() {
                     Welcome to FewerClicks!
                   </Typography>
                 </Grid>
+
+
+                {/******* Input Fields *******/}
                 <Grid
                   container
                   item
@@ -195,14 +218,16 @@ export default function Login() {
                       *Incorrect Email or Password*
                     </Grid>
                   )}
+
+                  {/******* Email *******/}
                   <Grid item>
                     <TextField
                       id="email"
                       name="email"
                       label="Email"
                       variant="standard"
-                      // multiline
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       error={
                         formik.touched.email && Boolean(formik.errors.email)
                       }
@@ -236,6 +261,8 @@ export default function Login() {
                     />
                   </Grid>
 
+                  
+                  {/******* Password *******/}
                   <Grid item>
                     <TextField
                       id="pass"
@@ -297,6 +324,9 @@ export default function Login() {
                   </Grid>
                 </Grid>
 
+
+
+                {/******* Remember me / Forgot password *******/}
                 <Grid container item justifyContent="space-between">
                   <Grid item>
                     <FormControlLabel
@@ -318,6 +348,8 @@ export default function Login() {
                   </Grid>
                 </Grid>
 
+
+                {/******* Login button *******/}
                 <Grid item>
                   <Button
                     color="success"
@@ -333,6 +365,8 @@ export default function Login() {
                   </Button>
                 </Grid>
 
+
+                {/******* Next-Auth Register / Sign In *******/}
                 <Grid
                   item
                   container
@@ -378,16 +412,10 @@ export default function Login() {
                             dispatch(setEmail(res.data.response.email));
                             dispatch(setToken(res.data.token));
                             dispatch(setLogin(true));
-                            
-                          })
-                          
-                          
-                      }
-                      
-                    }
-                    
+                          })                          
+                      }                      
+                    }                   
                     />
-                    {/* { callbackUrl: '/pages/dashboard' } */}
 
                     <XIcon
                       sx={{
@@ -421,6 +449,8 @@ export default function Login() {
                   </Grid>
                 </Grid>
 
+
+                {/******* Register re-direct *******/}
                 <Grid item sx={{ marginTop: "40px", display: "inline" }}>
                   <Typography variant="body2" color="secondary.main">
                     Dont have an account yet?
@@ -443,10 +473,14 @@ export default function Login() {
                     </Typography>
                   </Typography>
                 </Grid>
+
+
               </Grid>
             </form>
           </Grid>
 
+
+          {/******* Right part *******/}
           <Grid
             item
             xs={7}
@@ -457,6 +491,8 @@ export default function Login() {
               display: { lg: "block", md: "none", sm: "none", xs: "none" },
             }}
           >
+
+            {/******* Images *******/}
             <Box
               sx={{
                 borderRadius: "50%",
@@ -547,7 +583,6 @@ export default function Login() {
           </Grid>
         </Grid>
       </Box>
-      {/* </Container> */}
     </ThemeProvider>
   );
 }
